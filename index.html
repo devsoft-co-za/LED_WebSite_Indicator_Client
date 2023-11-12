@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LED WebSite Indicator api</title>
+    <h1>LED WebSite Indicator api example JavaScript code</h1>
+    <i>Note: please don't use this on the front end as your password will be visible in the console.</i>
+  </head>
+  <body>
+    <h3>Subscribe to output of LED WebSite Indicator here using Paho MQTT library:</h3>
+
+    <h3>Send message using LED WebSite Indicator api here:</h3>
+	<button id="sendButton">Send Request</button>
+    <div id="response"></div>
+
+    <script>
+        document.getElementById("sendButton").addEventListener("click", () => {
+            const username = "cpiiuakpau";
+            const password = "zsesvjhsbs";
+            const colour = "MAGENTA";
+
+            const url = `https://ledindicator.devsoft.co.za/api/ledindicatorrequest?username=${username}&password=${password}&colour=${colour}`;
+
+            fetch(url)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error(`Request failed with status: ${response.status}`);
+                    }
+                })
+                .then(data => {
+                    document.getElementById("response").textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    document.getElementById("response").textContent = `Error: ${error.message}`;
+                });
+        });
+    </script>
+  </body>
+</html>

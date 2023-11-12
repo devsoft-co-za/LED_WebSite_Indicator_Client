@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LED WebSite Indicator api</title>
+    <h1>LED WebSite Indicator api example JavaScript code</h1>
+    <i>Note: please don't use this on the front end as your password will be visible in the console.</i>
+    <p>Usage: click on "Subscribe", then "Send"</p>
+</head>
+
+<body>
+    <h3>Subscribe to output of LED WebSite Indicator here using Paho MQTT library:</h3>
+    Server Name: <input type="text" id="mqtt_server" value="159.65.184.34"><br><br>
+    Websocket: <input type="text" id="mqtt_port" value="9001"><br><br>
+    Destination Name: <input type="text" id="mqtt_destname" value="cpiiuakpau/LED"><br><br> 
+    <div>
+        <button onclick="sub_mqtt_msg()">Subscribe to MQTT</button>
+    </div>
+    <br>
+    <h2>Subscribed Messages:</h2>
+    <i>(received messages will show here)</i>
+    <div id=submsg></div>
+
+<h3>Send message using LED WebSite Indicator api here:</h3>
+<button id="sendButton">Send Request</button>
+<div id="response"></div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+
+<script>
+    document.getElementById("sendButton").addEventListener("click", () => {
+        const usr = "cpiiuakpau";
+        const pass = "zsesvjhsbs";
+        const colour = "LED"; // free version - paid version can be RED GREEN BLUE CYAN MAGANTA YELLOW or WHITE
+
+        const url = `https://ledindicator.devsoft.co.za/api/ledindicatorrequest?username=${usr}&password=${pass}&colour=${colour}`;
+
+        fetch(url)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error(`Request failed with status: ${response.status}`);
+                }
+            })
+            .then(data => {
+                document.getElementById("response").textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                document.getElementById("response").textContent = `Error: ${error.message}`;
+            });
+    });
+
+    var count = 0;
+
+    function sub_mqtt_msg() {
+        // Send an MQTT message
+        var mqtt_server = document.getElementById("mqtt_server").value;
+        var mqtt_port = Number(document.getElementById("mqtt_port").value);
+        var usr = "cpiiuakpau";
+        var pass = "zsesvjhsbs";
+        var clientId = "test_client_any_name_here";
+        client = new Paho.MQTT.Client(mqtt_server, mqtt_port, clientId);
+        client.onMessageArrived = onMessageArrived;
+        client.onMessageArrived = onMessageArrived;
+        client.connect({
+            'timeout': 10,
+            'keepAliveInterval': 20,
+            'cleanSession': true,
+            'useSSL': false,
+            // 'invocationContext': {'clientId': clientId},
+            'onSuccess': onConnect,
+            // 'mqttVersion': 3,
+            'userName': usr,
+            'password': pass
+        });
+
+        // client.connect({
+        //   onSuccess: onConnect,
+        //   mqttVersion: 3,
+        //   userName: usr,
+        //   password: pass
+        // });
+        document.getElementById("submsg").innerHTML = "Trying to connect...";
+
+    }
+    function onConnect() {
+        document.getElementById("submsg").innerHTML = "New connection made...";
+        var mqtt_destname = document.getElementById("mqtt_destname").value;
+        client.subscribe(mqtt_destname);
+        document.getElementById("submsg").innerHTML = "Subscribed to topic: " + mqtt_destname + ". Waiting for messages...";
+    }
+    function onMessageArrived(message) {
+        count++;
+        var result = message.destinationName + " - received message: " + count;
+        document.getElementById("submsg").innerHTML = result;
+    }
+</script>
+</body>
+<footer>
+    <br>
+    <a href="http://ledindicator.devsoft.co.za">Sign up to LED WebSite Indicator</a>
+</footer>
+
+</html>

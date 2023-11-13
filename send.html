@@ -4,23 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>LED WebSite Indicator api</title>
-    <h1>LED WebSite Indicator api example JavaScript code</h1>
-    <i>Note: please don't use this on the front end as your password will be visible in the console.</i>
+    <!-- Title and Meta Tags -->
+    <title>LED WebSite Indicator API</title>
+    
+    <!-- Heading for the page -->
+    <h1>LED WebSite Indicator API Example JavaScript Code</h1>
+    
+    <!-- A note about security concerns -->
+    <i>Note: Example only. Please don't use this on the front end as your password will be visible in the console.</i>
+    
   </head>
   <body>
-    <h3>Send message using LED WebSite Indicator api here:</h3>
+    <!-- Subheading for the form -->
+    <h3>Send a message using LED WebSite Indicator API here:</h3>
+    
+  <!-- Button to trigger the API request -->
 	<button id="sendButton">Send Request</button>
+    
+    <!-- Container to display the API response -->
     <div id="response"></div>
-
+    
+    <!-- JavaScript code for handling the API request -->
     <script>
         document.getElementById("sendButton").addEventListener("click", () => {
+            // When the "Send Request" button is clicked, this event listener is triggered.
             const username = "cpiiuakpau";
             const password = "zsesvjhsbs";
-            const colour = "MAGENTA";
+            const colour = "LED"; // free version - paid version can be RED GREEN BLUE CYAN MAGANTA YELLOW or WHITE
 
+            // Define the API URL with query parameters for username, password, and color.
             const url = `https://ledindicator.devsoft.co.za/api/ledindicatorrequest?username=${username}&password=${password}&colour=${colour}`;
 
+            // Use the Fetch API to send a GET request to the defined URL.
             fetch(url)
                 .then(response => {
                     if (response.ok) {
@@ -30,15 +45,20 @@
                     }
                 })
                 .then(data => {
+                    // If the request is successful, display the JSON response in the "response" container.
                     document.getElementById("response").textContent = JSON.stringify(data, null, 2);
                 })
                 .catch(error => {
+                    // If there is an error, display an error message in the "response" container.
                     document.getElementById("response").textContent = `Error: ${error.message}`;
                 });
         });
     </script>
+    
   </body>
   <footer>
-    <a href="http://ledindicator.devsoft.co.za">Sign up to LED WebSite Indicator</a>
+    <!-- A link to sign up for the LED WebSite Indicator service -->
+    <a href="http://ledindicator.devsoft.co.za">Sign up for LED WebSite Indicator</a>
+    
   </footer>
 </html>
